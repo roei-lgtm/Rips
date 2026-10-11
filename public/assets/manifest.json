@@ -1,0 +1,53 @@
+{
+  "license": "Original artwork created for RIPS demo; no third-party character art or logos.",
+  "packs": [
+    {
+      "category": "pokemon",
+      "asset": "/assets/packs/pokemon-trainer.png",
+      "editable": "/assets/packs/pokemon-trainer.svg",
+      "symbol": "/assets/categories/pokemon.svg"
+    },
+    {
+      "category": "pokemon",
+      "asset": "/assets/packs/pokemon-after-hours.png",
+      "editable": "/assets/packs/pokemon-after-hours.svg",
+      "symbol": "/assets/categories/pokemon.svg"
+    },
+    {
+      "category": "one-piece",
+      "asset": "/assets/packs/one-piece-pirate.png",
+      "editable": "/assets/packs/one-piece-pirate.svg",
+      "symbol": "/assets/categories/one-piece.svg"
+    },
+    {
+      "category": "one-piece",
+      "asset": "/assets/packs/one-piece-after-hours.png",
+      "editable": "/assets/packs/one-piece-after-hours.svg",
+      "symbol": "/assets/categories/one-piece.svg"
+    },
+    {
+      "category": "basketball",
+      "asset": "/assets/packs/basketball-hoops.png",
+      "editable": "/assets/packs/basketball-hoops.svg",
+      "symbol": "/assets/categories/basketball.svg"
+    },
+    {
+      "category": "basketball",
+      "asset": "/assets/packs/basketball-after-hours.png",
+      "editable": "/assets/packs/basketball-after-hours.svg",
+      "symbol": "/assets/categories/basketball.svg"
+    },
+    {
+      "category": "baseball",
+      "asset": "/assets/packs/baseball-rookie.png",
+      "editable": "/assets/packs/baseball-rookie.svg",
+      "symbol": "/assets/categories/baseball.svg"
+    },
+    {
+      "category": "baseball",
+      "asset": "/assets/packs/baseball-after-hours.png",
+      "editable": "/assets/packs/baseball-after-hours.svg",
+      "symbol": "/assets/categories/baseball.svg"
+    }
+  ]
+}

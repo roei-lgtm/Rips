@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "client"
+  output = "../node_modules/.prisma/client"
+}
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+model User {
+  id String @id
+  name String
+  role String @default("player")
+  createdAt DateTime @default(now())
+  wallet Wallet?
+  openings Opening[]
+  ledger LedgerEntry[]
+}
+model Wallet {
+  userId String @id
+  user User @relation(fields: [userId], references: [id])
+  balanceCents Int
+  version Int @default(0)
+}
+model LedgerEntry {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  type String
+  amountCents Int
+  openingId String?
+  balanceBeforeCents Int
+  balanceAfterCents Int
+  reason String?
+  createdAt DateTime @default(now())
+  idempotencyKey String @unique
+}
+model Category {
+  id String @id
+  slug String @unique
+  label String
+  iconAsset String
+  sortOrder Int
+  packs Pack[]
+  tiers Tier[]
+}
+model Pack {
+  id String @id @default(cuid())
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id])
+  slug String @unique
+  title String
+  description String
+  priceCents Int
+  accentHex String
+  secondaryHex String @default("#FFFFFF")
+  artworkAsset String
+  symbol String
+  isActive Boolean @default(false)
+  isHidden Boolean @default(false)
+  sortOrder Int @default(0)
+  sellBps Int @default(10000)
+  oddsVersions PackOddsVersion[]
+  openings Opening[]
+}
+model Tier {
+  id String @id
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id])
+  label String
+  marketValueCents Int
+  minStock Int @default(5)
+  cards Card[]
+  pools PooledInventory[]
+  rows PackOddsRow[]
+}
+model Card {
+  id String @id @default(cuid())
+  categoryId String
+  tierId String
+  tier Tier @relation(fields: [tierId], references: [id])
+  name String
+  grade String?
+  gradingCompany String?
+  certNumber String?
+  marketValueCents Int
+  sellValueCents Int
+  acquisitionCostCents Int @default(0)
+  vendor String @default("Demo seed")
+  imageAsset String
+  status String @default("in_stock")
+  ownerUserId String?
+  inventoryMode String @default("unique")
+  location String @default("Demo vault A")
+  acquiredAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  opening Opening?
+}
+model PooledInventory {
+  id String @id @default(cuid())
+  categoryId String
+  tierId String
+  tier Tier @relation(fields: [tierId], references: [id])
+  quantityAvailable Int
+  quantityReserved Int @default(0)
+  unitValueCents Int
+  unitAcquisitionCostCents Int
+  name String
+  imageAsset String
+}
+model PackOddsVersion {
+  id String @id @default(cuid())
+  packId String
+  pack Pack @relation(fields: [packId], references: [id])
+  version Int
+  isPublished Boolean @default(true)
+  createdAt DateTime @default(now())
+  rows PackOddsRow[]
+  openings Opening[]
+  @@unique([packId, version])
+}
+model PackOddsRow {
+  id String @id @default(cuid())
+  oddsVersionId String
+  oddsVersion PackOddsVersion @relation(fields: [oddsVersionId], references: [id])
+  tierId String
+  tier Tier @relation(fields: [tierId], references: [id])
+  weightBps Int
+  @@unique([oddsVersionId, tierId])
+}
+model Opening {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  packId String
+  pack Pack @relation(fields: [packId], references: [id])
+  oddsVersionId String
+  oddsVersion PackOddsVersion @relation(fields: [oddsVersionId], references: [id])
+  cardId String @unique
+  card Card @relation(fields: [cardId], references: [id])
+  pooledUnitRef String?
+  priceCents Int
+  outcomeMarketValueCents Int
+  outcomeSellValueCents Int
+  status String @default("pending")
+  randomReference String
+  createdAt DateTime @default(now())
+  resolvedAt DateTime?
+  idempotencyKey String @unique
+  fulfillment FulfillmentRequest?
+}
+model FulfillmentRequest {
+  id String @id @default(cuid())
+  openingId String @unique
+  opening Opening @relation(fields: [openingId], references: [id])
+  userId String
+  status String @default("requested")
+  addressPlaceholder String @default("Demo address — no real PII")
+  trackingPlaceholder String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model AuditLog {
+  id String @id @default(cuid())
+  actorId String
+  entityType String
+  entityId String
+  action String
+  payloadJson String
+  createdAt DateTime @default(now())
+}
+model Setting {
+  key String @id
+  value Int
+}
