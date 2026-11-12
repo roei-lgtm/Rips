@@ -1,12 +1,5 @@
-node_modules/
-.next/
+node_modules
+.next
 .env*
 !.env.example
-prisma/*.db*
-test-results/
-playwright-report/
 *.tsbuildinfo
-
-prisma/.prisma/
-
-.next-production/
